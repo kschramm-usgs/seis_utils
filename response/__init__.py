@@ -47,8 +47,8 @@ class Response():
     ostr+="\n"
     return ostr
     
-  def plot(self,nfft=16**2,t_sample=0.005,show=False,include_seismometer=True):
-    """ plot(self,nfft=16**2,t_sample=0.005,show=False)
+  def plot(self,nfft=16**2,t_sample=0.005,show=False,include_gain=True):
+    """ plot(self,nfft=16**2,t_sample=0.005,show=False,include_gain=True)
     Method to plot the response of an object where nfft and t_sample are documented in
     obspy.signal.pazToFreqResp.  Currenty all figures are generated in PDF format and saved
     by the unique description _freqresp.pdf.
@@ -61,7 +61,7 @@ class Response():
     from obspy.signal import pazToFreqResp
     h,f=pazToFreqResp(self.poles,self.zeros,self.a0,t_sample,nfft,freq=True)
     plt.figure()
-    if include_seismometer:
+    if include_gain:
       plt.loglog(f,np.abs(h)*self.gain)
       plt.ylabel('V/m/s')
     else:
@@ -135,3 +135,30 @@ class Response():
       logging.warn("Response.to_deimited warning: delimeter must be a string")
       o_str=None
     return o_str
+    
+def response_compare(response_list,desc='',nfft=16**2,t_sample=0.005,show=False,include_gain=True):
+    """ plot(response_list,desc='',nfft=16**2,t_sample=0.005,show=False,include_gain=True)
+    Method to plot the response of a list of response objects where nfft and t_sample are documented in
+    obspy.signal.pazToFreqResp.  Currenty all figures are generated in PDF format and saved
+    by the unique description _freqresp.pdf.
+    
+    Requires:
+    matplotlib
+    obspy.signal.pazToFreqResp
+    """
+    import matplotlib.pyplot as plt
+    from obspy.signal import pazToFreqResp
+    plt.figure()
+    for resp in response_list:
+      h,f=pazToFreqResp(self.poles,self.zeros,self.a0,t_sample,nfft,freq=True)
+      if include_gain:
+        plt.loglog(f,np.abs(h)*self.gain)
+        plt.ylabel('V/m/s')
+      else:
+        plt.loglog(f,np.abs(h)*self.gain)
+        plt.ylabel('Amplitude')   
+      plt.xlabel('Frequency (Hz)')    
+      plt.grid(which='both')
+      plt.savefig(self.desc+'_freqresp.pdf',bbox='tight',transparent=True)
+      if show==True:
+        plt.show()
