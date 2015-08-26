@@ -150,15 +150,16 @@ def response_compare(response_list,desc='',nfft=16**2,t_sample=0.005,show=False,
     from obspy.signal import pazToFreqResp
     plt.figure()
     for resp in response_list:
-      h,f=pazToFreqResp(self.poles,self.zeros,self.a0,t_sample,nfft,freq=True)
+      h,f=pazToFreqResp(resp.poles,resp.zeros,resp.a0,t_sample,nfft,freq=True)
       if include_gain:
-        plt.loglog(f,np.abs(h)*self.gain)
+        plt.loglog(f,np.abs(h)*resp.gain,label=resp.desc)
         plt.ylabel('V/m/s')
       else:
-        plt.loglog(f,np.abs(h)*self.gain)
+        plt.loglog(f,np.abs(h)*resp.gain)
         plt.ylabel('Amplitude')   
       plt.xlabel('Frequency (Hz)')    
       plt.grid(which='both')
-      plt.savefig(self.desc+'_freqresp.pdf',bbox='tight',transparent=True)
-      if show==True:
-        plt.show()
+      plt.legend()
+    plt.savefig(desc+'_freqresp.pdf',bbox='tight',transparent=True)
+    if show==True:
+      plt.show()
