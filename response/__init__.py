@@ -119,7 +119,7 @@ class Response():
     norm=np.abs(h)[i_f]
     return norm,f[i_f]
   
-  def to_delimited(self,delimiter=",",freq=1.0):
+  def to_delimited(self,delimiter=",",freq=1.0,nfft=16**2,t_sample=0.005):
     """ 
     This method creates a one line string for parameters delimited by the designated 
     delimiter the fields include:
@@ -130,7 +130,7 @@ class Response():
     countsperV
     sensitivity
     """
-    norm,f_norm=self.check_normalization(freq=freq)
+    norm,f_norm=self.check_normalization(freq=freq,nfft=nfft,t_sample=t_sample)
     out=[self.desc,self.gain,norm,f_norm,self.countsperV,self.sensitivity]
     if isinstance(delimiter, str):
       o_str=delimiter.join(map(str,out))
