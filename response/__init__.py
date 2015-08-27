@@ -117,7 +117,6 @@ class Response():
     i_f=np.argmin(np.abs(f-freq))
     logging.debug("Index of value closest to freq %d" % (i_f))
     norm=np.abs(h)[i_f]
-    logging.debug("Values at min
     return norm,f[i_f]
   
   def to_delimited(self,delimiter=",",freq=1.0):
